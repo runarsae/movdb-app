@@ -9,7 +9,7 @@ import {filterOpenVar, searchOpenVar, sortOpenVar} from "../Store";
 const styles = StyleSheet.create({
     navbar: {
         backgroundColor: "#252525",
-        zIndex: 10
+        zIndex: 3
     }
 });
 
@@ -54,7 +54,7 @@ function Header(): JSX.Element {
     };
 
     return (
-        <View style={{zIndex: 10}}>
+        <View style={{zIndex: 3}}>
             <Appbar.Header style={styles.navbar}>
                 <Appbar.Content title="MovDB" color={colors.primary} />
                 <Appbar.Action icon="magnify" color={colors.primary} onPress={toggleSearch} />

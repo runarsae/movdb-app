@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     subbar: {
         position: "absolute",
         width: "100%",
-        zIndex: 9
+        zIndex: 2
     },
     container: {
         padding: 16,
