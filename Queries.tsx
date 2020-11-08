@@ -1,45 +1,11 @@
 /*
- *    Queries to backend
+ *    Queries to backend with types
  */
 
 import gql from "graphql-tag";
+import {Interval} from "./Store";
 
-const CURRENT_USER = gql`
-    {
-        currentUser {
-            username
-        }
-    }
-`;
-
-const LOGIN = gql`
-    query loginUser($username: String!, $password: String!) {
-        loginUser(username: $username, password: $password) {
-            token
-        }
-    }
-`;
-
-const REGISTER = gql`
-    mutation createUser($username: String!, $password: String!) {
-        createUser(username: $username, password: $password) {
-            _id
-            username
-        }
-    }
-`;
-
-const LIKE = gql`
-    mutation createLike($imdb_id: String!) {
-        createLike(imdb_id: $imdb_id) {
-            _id
-            username
-            imdb_id
-        }
-    }
-`;
-
-const MOVIE_DATA = gql`
+const MOVIE = gql`
     query movie($imdb_id: String!) {
         movie(imdb_id: $imdb_id) {
             original_title
@@ -56,6 +22,22 @@ const MOVIE_DATA = gql`
         }
     }
 `;
+
+interface Movie {
+    imdb_id?: string;
+    original_title?: string;
+    overview?: string;
+    poster_path?: string;
+    genres?: string[];
+    production_contries?: {
+        name: string;
+    };
+    production_companies?: string[];
+    runtime?: number;
+    release_date?: string;
+    trailer?: string;
+    rating?: number;
+}
 
 const MOVIES = gql`
     query movies(
@@ -85,6 +67,27 @@ const MOVIES = gql`
     }
 `;
 
+interface MoviesVariables {
+    search: string;
+    sortBy: string;
+    sortDirection: string;
+    filter: {
+        genres: string[];
+        production_countries: string[];
+        release_date: Interval;
+        runtime: Interval;
+    };
+    page: number;
+    pageSize: number;
+}
+
+interface Movies {
+    movies: {
+        movies: Movie[];
+        pageCount: number;
+    };
+}
+
 const FILTER_OPTIONS = gql`
     query menuOptions {
         menuOptions {
@@ -102,63 +105,13 @@ const FILTER_OPTIONS = gql`
     }
 `;
 
-const LIKES = gql`
-    query likes($imdb_id: String!) {
-        likes(imdb_id: $imdb_id) {
-            likesCount
-            hasLiked
-        }
-    }
-`;
+interface FilterOptions {
+    menuOptions: {
+        genres: string[];
+        productionCountries: string[];
+        releaseDateInterval: Interval;
+        runtimeInterval: Interval;
+    };
+}
 
-// CACHE-ONLY QUERIES
-const FILTER_OPEN = gql`
-    query filterOpen {
-        filterOpen @client
-    }
-`;
-
-const FILTER = gql`
-    query filter {
-        filter @client {
-            genres
-            productionCountries
-            releaseDateInterval
-            runtimeInterval
-        }
-    }
-`;
-
-const SORT = gql`
-    query sort {
-        sort @client
-    }
-`;
-
-const SORT_DIRECTION = gql`
-    query sortDirection {
-        sortDirection @client
-    }
-`;
-
-const SEARCH = gql`
-    query search {
-        search @client
-    }
-`;
-
-export {
-    CURRENT_USER,
-    LOGIN,
-    REGISTER,
-    FILTER_OPEN,
-    FILTER,
-    FILTER_OPTIONS,
-    MOVIES,
-    SORT,
-    SORT_DIRECTION,
-    SEARCH,
-    MOVIE_DATA,
-    LIKES,
-    LIKE
-};
+export {MOVIE, Movie, MOVIES, MoviesVariables, Movies, FILTER_OPTIONS, FilterOptions};

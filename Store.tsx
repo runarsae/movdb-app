@@ -24,6 +24,7 @@ export const sortDirectionVar = makeVar<SortDirectionType>("DESC");
 
 export const filterOpenVar = makeVar<boolean>(false);
 export const filterVar = makeVar<FilterType | null>(null);
+export const filterTempVar = makeVar<FilterType | null>(null);
 
 export const cache = new InMemoryCache({
     typePolicies: {

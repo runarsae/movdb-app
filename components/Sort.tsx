@@ -92,7 +92,7 @@ function Sort(): JSX.Element {
             onLayout={(event) => {
                 // Get height of sort bar
                 var {height} = event.nativeEvent.layout;
-                if (Math.abs(height - sortHeight) > 10) {
+                if (Math.abs(height - sortHeight) > 2) {
                     setSortHeight(height);
                 }
             }}
