@@ -6,6 +6,7 @@ import {cache} from "./Store";
 import Header from "./components/Header";
 import Backdrop from "./components/Backdrop";
 import Filter from "./components/Filter";
+import MovieContainer from "./components/MovieContainer";
 
 // Remove outline of input elements and style scroll bars on web
 const injectWebCss = () => {
@@ -80,7 +81,7 @@ export default function App() {
                 <View style={styles.wrapper}>
                     <Header />
                     <Filter />
-
+                    <MovieContainer />
                     <Backdrop />
                 </View>
             </ThemeProvider>
