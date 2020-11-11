@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     }
 });
 
-function Filter() {
+function Filter(): JSX.Element {
     const {colors} = useTheme();
 
     // Width of filter menu; used to decide how far to slide it out when closed
@@ -102,12 +102,14 @@ function Filter() {
         type: "genres" | "releaseDateInterval" | "runtimeInterval",
         value: Interval | string[]
     ) => {
-        const updatedFilter = {
-            ...filterTemp!,
-            [type]: value
-        };
+        if (filterTemp) {
+            const updatedFilter = {
+                ...filterTemp,
+                [type]: value
+            };
 
-        filterTempVar(updatedFilter);
+            filterTempVar(updatedFilter);
+        }
     };
 
     // When filter is closed, set temporary values to be the real filter values if they are changed
@@ -130,7 +132,7 @@ function Filter() {
             ]}
             onLayout={(event) => {
                 // Get width of filter menu
-                var {width} = event.nativeEvent.layout;
+                const {width} = event.nativeEvent.layout;
                 if (width !== filterWidth) {
                     setFilterWidth(width);
                 }

@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     }
 });
 
-function MovieContainer() {
+function MovieContainer(): JSX.Element {
     const {colors} = useTheme();
 
     const [containerHeight, setContainerHeight] = useState<number>(0);
