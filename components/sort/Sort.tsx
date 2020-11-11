@@ -2,8 +2,9 @@ import React, {useEffect, useState} from "react";
 import {useReactiveVar} from "@apollo/client";
 import {StyleSheet, View} from "react-native";
 import {Surface, Chip, useTheme} from "react-native-paper";
-import {searchVar, sortDirectionVar, sortOpenVar, sortVar, SortType, SortDirectionType} from "../Store";
+import {searchVar, sortDirectionVar, sortOpenVar, sortVar, SortType, SortDirectionType} from "../../Store";
 import * as Animatable from "react-native-animatable";
+import {getStatusBarHeight} from "react-native-status-bar-height";
 
 const styles = StyleSheet.create({
     subbar: {
@@ -82,13 +83,13 @@ function Sort(): JSX.Element {
 
     return (
         <Animatable.View
-            transition={"bottom"}
+            transition={"top"}
             duration={250}
             style={[
                 styles.subbar,
                 {
                     // Calculate where to place sort bar according to its height
-                    bottom: sortOpen ? -sortHeight + 1 : 10
+                    top: sortOpen ? 56 + getStatusBarHeight() : -sortHeight
                 }
             ]}
             onLayout={(event) => {

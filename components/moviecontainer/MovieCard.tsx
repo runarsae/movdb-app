@@ -1,7 +1,7 @@
 import React, {memo} from "react";
 import {StyleSheet, Text, TouchableHighlight, View, Image} from "react-native";
 import {Card, useTheme} from "react-native-paper";
-import {popupMovieVar, popupOpenVar} from "../Store";
+import {popupMovieVar, popupOpenVar} from "../../Store";
 
 const styles = StyleSheet.create({
     movie: {

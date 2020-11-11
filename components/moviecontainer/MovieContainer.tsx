@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react";
 import MovieCard from "./MovieCard";
 import {useQuery, useReactiveVar} from "@apollo/client";
-import {Movie, MOVIES, Movies, MoviesVariables} from "../Queries";
+import {Movie, MOVIES, Movies, MoviesVariables} from "../../Queries";
 import {Text, View, StyleSheet, ActivityIndicator, ScrollView, NativeScrollEvent} from "react-native";
 import {useTheme} from "react-native-paper";
-import {filterVar, searchVar, sortDirectionVar, sortVar} from "../Store";
+import {filterVar, searchVar, sortDirectionVar, sortVar} from "../../Store";
 
 const styles = StyleSheet.create({
     container: {

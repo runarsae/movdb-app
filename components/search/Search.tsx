@@ -3,7 +3,8 @@ import {useReactiveVar} from "@apollo/client";
 import {StyleSheet, View, TextInput, NativeSyntheticEvent, TextInputKeyPressEventData} from "react-native";
 import {Avatar, Surface, useTheme} from "react-native-paper";
 import * as Animatable from "react-native-animatable";
-import {searchVar, searchOpenVar} from "../Store";
+import {searchVar, searchOpenVar} from "../../Store";
+import {getStatusBarHeight} from "react-native-status-bar-height";
 
 const styles = StyleSheet.create({
     subbar: {
@@ -78,13 +79,13 @@ function Search(): JSX.Element {
 
     return (
         <Animatable.View
-            transition={"bottom"}
+            transition={"top"}
             duration={250}
             style={[
                 styles.subbar,
                 {
                     // Calculate where to place search bar according to its height
-                    bottom: searchOpen ? -searchHeight : 10
+                    top: searchOpen ? 56 + getStatusBarHeight() : -searchHeight
                 }
             ]}
             onLayout={(event) => {

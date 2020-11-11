@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useQuery, useReactiveVar} from "@apollo/client";
-import {popupMovieVar, popupOpenVar} from "../Store";
-import {MOVIE, Movie} from "../Queries";
+import {popupMovieVar, popupOpenVar} from "../../Store";
+import {MOVIE, Movie} from "../../Queries";
 import {StyleSheet, ActivityIndicator, ScrollView, View} from "react-native";
 import {Caption, Card, IconButton, Paragraph, Title, useTheme, Text, Divider, Avatar} from "react-native-paper";
 import ChipContainer from "./ChipContainer";

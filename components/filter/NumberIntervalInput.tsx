@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {StyleSheet, TextInput, View} from "react-native";
 import {useTheme} from "react-native-paper";
-import {Interval} from "../Store";
+import {Interval} from "../../Store";
 
 const styles = StyleSheet.create({
     container: {

@@ -1,10 +1,7 @@
 import React from "react";
 import {useReactiveVar} from "@apollo/client";
-import {View} from "react-native";
 import {Appbar, useTheme} from "react-native-paper";
-import Search from "./Search";
-import Sort from "./Sort";
-import {filterOpenVar, searchOpenVar, sortOpenVar} from "../Store";
+import {filterOpenVar, searchOpenVar, sortOpenVar} from "../../Store";
 
 function Header(): JSX.Element {
     const {colors} = useTheme();
@@ -45,18 +42,12 @@ function Header(): JSX.Element {
     };
 
     return (
-        <View style={{zIndex: 3}}>
-            <Appbar.Header style={{zIndex: 3, backgroundColor: colors.surface}}>
-                <Appbar.Content title="MovDB" color={colors.primary} />
-                <Appbar.Action icon="magnify" color={colors.primary} onPress={toggleSearch} />
-                <Appbar.Action icon="swap-vertical" color={colors.primary} onPress={toggleSort} />
-                <Appbar.Action icon="dots-vertical" color={colors.primary} onPress={toggleFilter} />
-            </Appbar.Header>
-
-            <Search />
-
-            <Sort />
-        </View>
+        <Appbar.Header style={{zIndex: 3, backgroundColor: colors.surface}}>
+            <Appbar.Content title="MovDB" color={colors.primary} />
+            <Appbar.Action icon="magnify" color={colors.primary} onPress={toggleSearch} />
+            <Appbar.Action icon="swap-vertical" color={colors.primary} onPress={toggleSort} />
+            <Appbar.Action icon="dots-vertical" color={colors.primary} onPress={toggleFilter} />
+        </Appbar.Header>
     );
 }
 
