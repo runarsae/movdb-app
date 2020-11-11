@@ -9,6 +9,8 @@ import {getStatusBarHeight} from "react-native-status-bar-height";
 const styles = StyleSheet.create({
     subbar: {
         position: "absolute",
+        bottom: "100%",
+        left: 0,
         width: "100%",
         zIndex: 2
     },
@@ -83,13 +85,15 @@ function Sort(): JSX.Element {
 
     return (
         <Animatable.View
-            transition={"top"}
+            transition={"translateY"}
             duration={250}
             style={[
                 styles.subbar,
                 {
-                    // Calculate where to place sort bar according to its height
-                    top: sortOpen ? 56 + getStatusBarHeight() : -sortHeight
+                    // Use height of sort bar to place it correctly when it is open
+                    transform: [
+                        {translateY: sortOpen ? getStatusBarHeight() + 56 + sortHeight : -(getStatusBarHeight() + 51)}
+                    ]
                 }
             ]}
             onLayout={(event) => {
