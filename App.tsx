@@ -3,11 +3,13 @@ import {StyleSheet, View, Platform} from "react-native";
 import {DefaultTheme, Provider as ThemeProvider} from "react-native-paper";
 import {ApolloClient, ApolloProvider, NormalizedCacheObject} from "@apollo/client";
 import {cache} from "./Store";
-import Header from "./components/Header";
-import Backdrop from "./components/Backdrop";
-import Filter from "./components/Filter";
-import MovieContainer from "./components/MovieContainer";
-import MoviePopup from "./components/MoviePopup";
+import Header from "./components/header/Header";
+import Backdrop from "./components/common/Backdrop";
+import Filter from "./components/filter/Filter";
+import MovieContainer from "./components/moviecontainer/MovieContainer";
+import MoviePopup from "./components/moviepopup/MoviePopup";
+import Search from "./components/search/Search";
+import Sort from "./components/sort/Sort";
 
 // Web styling: Remove outline of input elements and style scroll bars
 const injectWebCss = () => {
@@ -81,6 +83,8 @@ export default function App(): JSX.Element {
             <ThemeProvider theme={theme}>
                 <View style={styles.wrapper}>
                     <Header />
+                    <Search />
+                    <Sort />
                     <Filter />
                     <MovieContainer />
                     <MoviePopup />

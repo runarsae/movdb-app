@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
 import {useQuery, useReactiveVar} from "@apollo/client";
-import {FilterOptions, FILTER_OPTIONS} from "../Queries";
+import {FilterOptions, FILTER_OPTIONS} from "../../Queries";
 import {Keyboard, KeyboardAvoidingView, ScrollView, StyleSheet, View} from "react-native";
-import {filterOpenVar, filterTempVar, FilterType, filterVar, Interval} from "../Store";
+import {filterOpenVar, filterTempVar, FilterType, filterVar, Interval} from "../../Store";
 import * as Animatable from "react-native-animatable";
 import {getStatusBarHeight} from "react-native-status-bar-height";
 import {Button, Headline, IconButton, Subheading, Surface, useTheme} from "react-native-paper";
@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
         maxWidth: 400
     },
     container: {
+        zIndex: 6,
         height: "100%"
     },
     header: {

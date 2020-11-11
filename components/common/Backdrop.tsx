@@ -1,7 +1,7 @@
 import React from "react";
 import {useReactiveVar} from "@apollo/client";
 import {Keyboard, StyleSheet, TouchableWithoutFeedback, View} from "react-native";
-import {filterOpenVar, popupOpenVar, searchOpenVar, sortOpenVar} from "../Store";
+import {filterOpenVar, popupOpenVar, searchOpenVar, sortOpenVar} from "../../Store";
 
 const styles = StyleSheet.create({
     backdrop: {
