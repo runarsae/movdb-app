@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import MovieCard from "./MovieCard";
 import {useQuery, useReactiveVar} from "@apollo/client";
 import {Movie, MOVIES, Movies, MoviesVariables} from "../../Queries";
@@ -50,16 +50,19 @@ function MovieContainer(): JSX.Element {
     const [currentPage, setCurrentPage] = useState<number>(0);
     const [pageLoading, setPageLoading] = useState<boolean>(true);
 
+    const scrollViewRef = useRef<ScrollView>(null);
+
     // If filter, search, sort or sort direction is changed,
-    // reset current page, page count and movies array
+    // reset current page, page count and movies array, and scroll to top
     useEffect(() => {
         // Wait till all values are recieved
-        if (filter && search !== undefined && sort && sortDirection) {
+        if (filter && search !== undefined && sort && sortDirection && scrollViewRef.current) {
             setCurrentPage(1);
             setPageCount(1);
             setMovies([]);
+            scrollViewRef.current.scrollTo({y: 0});
         }
-    }, [filter, search, sort, sortDirection]);
+    }, [filter, search, sort, sortDirection, scrollViewRef]);
 
     // If current page or movies array is changed,
     // update the variables used in the query
@@ -140,6 +143,7 @@ function MovieContainer(): JSX.Element {
     return (
         <View style={styles.container}>
             <ScrollView
+                ref={scrollViewRef}
                 contentContainerStyle={styles.movies}
                 onScroll={({nativeEvent}) => {
                     // If scroll has reached the end, load the next page
