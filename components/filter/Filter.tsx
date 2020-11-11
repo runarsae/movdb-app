@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
     drawer: {
         zIndex: 6,
         position: "absolute",
+        left: "100%",
         top: 0,
         width: "100%",
         height: "100%",
@@ -122,13 +123,13 @@ function Filter(): JSX.Element {
 
     return (
         <Animatable.View
-            transition={"right"}
+            transition={"translateX"}
             duration={250}
             style={[
                 styles.drawer,
                 {
-                    // On closed, slide it out on the right according to its width
-                    right: filterOpen ? 0 : -filterWidth
+                    // On open, slide it in on the right according to its width
+                    transform: [{translateX: filterOpen ? -filterWidth : 0}]
                 }
             ]}
             onLayout={(event) => {
