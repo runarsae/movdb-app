@@ -1,17 +1,10 @@
 import React from "react";
 import {useReactiveVar} from "@apollo/client";
-import {StyleSheet, View} from "react-native";
+import {View} from "react-native";
 import {Appbar, useTheme} from "react-native-paper";
 import Search from "./Search";
 import Sort from "./Sort";
 import {filterOpenVar, searchOpenVar, sortOpenVar} from "../Store";
-
-const styles = StyleSheet.create({
-    navbar: {
-        backgroundColor: "#252525",
-        zIndex: 3
-    }
-});
 
 function Header(): JSX.Element {
     const {colors} = useTheme();
@@ -20,9 +13,11 @@ function Header(): JSX.Element {
 
     const sortOpen = useReactiveVar(sortOpenVar);
 
-    // Open filter menu
+    // Open filter menu and close search/sort bar if open
     const toggleFilter = () => {
         filterOpenVar(true);
+        searchOpenVar(false);
+        sortOpenVar(false);
     };
 
     const toggleSort = () => {
@@ -30,9 +25,7 @@ function Header(): JSX.Element {
         if (!sortOpen) {
             // Open sort bar and close search bar if it is open
             sortOpenVar(true);
-            if (searchOpen) {
-                searchOpenVar(false);
-            }
+            searchOpenVar(false);
         } else {
             // Close sort bar
             sortOpenVar(false);
@@ -44,9 +37,7 @@ function Header(): JSX.Element {
         if (!searchOpen) {
             // Open search bar and close sort bar if it is open
             searchOpenVar(true);
-            if (sortOpen) {
-                sortOpenVar(false);
-            }
+            sortOpenVar(false);
         } else {
             // Close search bar
             searchOpenVar(false);
@@ -55,7 +46,7 @@ function Header(): JSX.Element {
 
     return (
         <View style={{zIndex: 3}}>
-            <Appbar.Header style={styles.navbar}>
+            <Appbar.Header style={{zIndex: 3, backgroundColor: colors.surface}}>
                 <Appbar.Content title="MovDB" color={colors.primary} />
                 <Appbar.Action icon="magnify" color={colors.primary} onPress={toggleSearch} />
                 <Appbar.Action icon="swap-vertical" color={colors.primary} onPress={toggleSort} />

@@ -5,12 +5,37 @@ import {ApolloClient, ApolloProvider, NormalizedCacheObject} from "@apollo/clien
 import {cache} from "./Store";
 import Header from "./components/Header";
 import Backdrop from "./components/Backdrop";
+import Filter from "./components/Filter";
 
-// Remove outline of input elements on web
+// Remove outline of input elements and style scroll bars on web
 const injectWebCss = () => {
     if (Platform.OS === "web") {
         const style = document.createElement("style");
-        style.textContent = `textarea, select, input, button {outline: none !important;}`;
+        style.textContent = `
+            textarea, select, input, button {
+                outline: none !important;
+            }
+            
+            ::-webkit-scrollbar {
+                width: 6px;
+                height: 4px;
+            }
+
+            ::-webkit-scrollbar-track {
+                background-color: transparent;
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background-color: #505050;
+                border-radius: 4px;
+            }
+            
+            ::-webkit-scrollbar-thumb:hover {
+                background-color: #3D3D3D;
+            }
+            
+        `;
+
         return document.head.append(style);
     }
 };
@@ -20,7 +45,10 @@ injectWebCss();
 // Root element styling
 const styles = StyleSheet.create({
     wrapper: {
-        backgroundColor: "green", //"#111010",
+        backgroundColor: "#111010",
+        width: "100%",
+        height: 0,
+        overflow: "hidden",
         flex: 1
     }
 });
@@ -51,6 +79,7 @@ export default function App() {
             <ThemeProvider theme={theme}>
                 <View style={styles.wrapper}>
                     <Header />
+                    <Filter />
 
                     <Backdrop />
                 </View>
