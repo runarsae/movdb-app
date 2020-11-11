@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useQuery, useReactiveVar} from "@apollo/client";
 import {FilterOptions, FILTER_OPTIONS} from "../../Queries";
-import {Keyboard, KeyboardAvoidingView, ScrollView, StyleSheet, View} from "react-native";
+import {Dimensions, Keyboard, KeyboardAvoidingView, ScaledSize, ScrollView, StyleSheet, View} from "react-native";
 import {filterOpenVar, filterTempVar, FilterType, filterVar, Interval} from "../../Store";
 import * as Animatable from "react-native-animatable";
 import {getStatusBarHeight} from "react-native-status-bar-height";
@@ -16,8 +16,7 @@ const styles = StyleSheet.create({
         left: "100%",
         top: 0,
         width: "100%",
-        height: "100%",
-        maxWidth: 400
+        height: "100%"
     },
     container: {
         zIndex: 6,
@@ -50,7 +49,10 @@ const styles = StyleSheet.create({
 function Filter(): JSX.Element {
     const {colors} = useTheme();
 
-    // Width of filter menu; used to decide how far to slide it out when closed
+    // Window width used to decide when filter menu should cover the whole width
+    const [windowWidth, setWindowWidth] = useState<number>(Dimensions.get("window").width);
+
+    // Width of filter menu; used to decide how far to slide it in when menu is open
     const [filterWidth, setFilterWidth] = useState<number>(400);
 
     // Get filter data from store, updates when changed
@@ -121,12 +123,25 @@ function Filter(): JSX.Element {
         }
     }, [filterOpen, filter, filterTemp]);
 
+    // Update window width on resize
+    useEffect(() => {
+        const onChange = ({window}: {window: ScaledSize}) => {
+            setWindowWidth(window.width);
+        };
+
+        Dimensions.addEventListener("change", onChange);
+        return () => {
+            Dimensions.removeEventListener("change", onChange);
+        };
+    });
+
     return (
         <Animatable.View
             transition={"translateX"}
             duration={250}
             style={[
                 styles.drawer,
+                windowWidth >= 500 && {maxWidth: 400},
                 {
                     // On open, slide it in on the right according to its width
                     transform: [{translateX: filterOpen ? -filterWidth : 0}]
