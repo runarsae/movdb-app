@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useQuery, useReactiveVar} from "@apollo/client";
 import {popupMovieVar, popupOpenVar} from "../../Store";
 import {MOVIE, Movie} from "../../Queries";
-import {StyleSheet, ActivityIndicator, ScrollView, View} from "react-native";
+import {StyleSheet, ActivityIndicator, ScrollView, View, Dimensions} from "react-native";
 import {Caption, Card, IconButton, Paragraph, Title, useTheme, Text, Divider, Avatar} from "react-native-paper";
 import ChipContainer from "./ChipContainer";
 import {getStatusBarHeight} from "react-native-status-bar-height";
@@ -13,14 +13,12 @@ const styles = StyleSheet.create({
         position: "absolute",
         width: "100%",
         height: "100%",
-        zIndex: 5,
-        paddingHorizontal: 15,
-        paddingBottom: 15
+        zIndex: 5
     },
     container: {
+        paddingHorizontal: 15,
+        paddingBottom: 15,
         width: "100%",
-        height: "100%",
-        justifyContent: "center",
         alignItems: "center"
     },
     card: {
@@ -73,8 +71,23 @@ const styles = StyleSheet.create({
     }
 });
 
+/*
+ *   Field with an icon and text, used under the title of the popup
+ */
+function UndertitleField(props: {icon: string; text: string}): JSX.Element {
+    return (
+        <View style={styles.undertitleField}>
+            <Avatar.Icon icon={props.icon} color={"#858383"} style={styles.undertitleFieldIcon} size={24} />
+            <Text style={{color: "#858383"}}>{props.text}</Text>
+        </View>
+    );
+}
+
 function MoviePopup(): JSX.Element | null {
     const {colors} = useTheme();
+
+    // Boolean used to decide how to vertically align the popup
+    const [alignCenter, setAlignCenter] = useState<boolean | undefined>(false);
 
     const popupOpen = useReactiveVar(popupOpenVar);
     const popupMovie = useReactiveVar(popupMovieVar);
@@ -94,25 +107,40 @@ function MoviePopup(): JSX.Element | null {
         }
     }, [data]);
 
+    // When popup closes, clear movie data and alignment
     useEffect(() => {
         if (!popupOpen) {
             setMovie(undefined);
             popupMovieVar(undefined);
+            setAlignCenter(undefined);
         }
     }, [popupOpen]);
 
     if (popupOpen) {
         return (
             <ScrollView
-                style={[
-                    {display: popupOpen ? "flex" : "none"},
-                    styles.wrapper,
-                    {paddingTop: 15 + getStatusBarHeight()}
+                style={styles.wrapper}
+                contentContainerStyle={[
+                    styles.container,
+                    {paddingTop: 15 + getStatusBarHeight()},
+                    // If alignment is not decided yet, make the view invisible
+                    {opacity: typeof alignCenter === "undefined" && movie ? 0 : 1},
+
+                    // Center vertically if alignCenter is true or if the movie is loading (centers loading icon)
+                    alignCenter || !movie ? {justifyContent: "center", height: "100%"} : {justifyContent: "flex-start"}
                 ]}
-                contentContainerStyle={styles.container}
             >
                 {movie ? (
-                    <Card style={styles.card}>
+                    <Card
+                        style={styles.card}
+                        onLayout={(event) => {
+                            const height = event.nativeEvent.layout.height;
+                            const windowHeight = Dimensions.get("window").height;
+
+                            // If height of card (+ padding) is smaller than the window height, center it vertically
+                            height + 30 < windowHeight ? setAlignCenter(true) : setAlignCenter(false);
+                        }}
+                    >
                         <Card.Content>
                             <IconButton
                                 icon="close"
@@ -133,7 +161,7 @@ function MoviePopup(): JSX.Element | null {
 
                                 <UndertitleField
                                     icon="clock"
-                                    // Calculate hours and minutes
+                                    // Convert minutes into hours and minutes
                                     text={Math.floor(movie.runtime! / 60) + "h " + (movie.runtime! % 60) + "min"}
                                 />
                             </Caption>
@@ -170,12 +198,3 @@ function MoviePopup(): JSX.Element | null {
 }
 
 export default MoviePopup;
-
-function UndertitleField(props: {icon: string; text: string}) {
-    return (
-        <View style={styles.undertitleField}>
-            <Avatar.Icon icon={props.icon} color={"#858383"} style={styles.undertitleFieldIcon} size={24} />
-            <Text style={{color: "#858383"}}>{props.text}</Text>
-        </View>
-    );
-}
