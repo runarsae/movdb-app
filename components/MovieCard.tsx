@@ -1,6 +1,7 @@
 import React, {memo} from "react";
 import {StyleSheet, Text, TouchableHighlight, View, Image} from "react-native";
 import {Card, useTheme} from "react-native-paper";
+import {popupMovieVar, popupOpenVar} from "../Store";
 
 const styles = StyleSheet.create({
     movie: {
@@ -52,7 +53,7 @@ interface Props {
     rating: number;
 }
 
-function MovieCard(props: Props) {
+function MovieCard(props: Props): JSX.Element {
     const {colors} = useTheme();
 
     const posterURL = "https://image.tmdb.org/t/p/w400/" + props.poster;
@@ -61,8 +62,8 @@ function MovieCard(props: Props) {
         <Card style={styles.movie}>
             <TouchableHighlight
                 onPress={() => {
-                    // Open movie popup
-                    return;
+                    popupMovieVar(props.imdbID);
+                    popupOpenVar(true);
                 }}
                 underlayColor="black"
                 activeOpacity={0.7}

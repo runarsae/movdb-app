@@ -29,9 +29,9 @@ interface Movie {
     overview?: string;
     poster_path?: string;
     genres?: string[];
-    production_contries?: {
+    production_countries?: {
         name: string;
-    };
+    }[];
     production_companies?: string[];
     runtime?: number;
     release_date?: string;
