@@ -7,8 +7,9 @@ import Header from "./components/Header";
 import Backdrop from "./components/Backdrop";
 import Filter from "./components/Filter";
 import MovieContainer from "./components/MovieContainer";
+import MoviePopup from "./components/MoviePopup";
 
-// Remove outline of input elements and style scroll bars on web
+// Web styling: Remove outline of input elements and style scroll bars
 const injectWebCss = () => {
     if (Platform.OS === "web") {
         const style = document.createElement("style");
@@ -74,7 +75,7 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
     cache: cache
 });
 
-export default function App() {
+export default function App(): JSX.Element {
     return (
         <ApolloProvider client={client}>
             <ThemeProvider theme={theme}>
@@ -82,6 +83,7 @@ export default function App() {
                     <Header />
                     <Filter />
                     <MovieContainer />
+                    <MoviePopup />
                     <Backdrop />
                 </View>
             </ThemeProvider>

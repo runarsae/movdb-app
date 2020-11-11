@@ -1,7 +1,7 @@
 import React from "react";
 import {useReactiveVar} from "@apollo/client";
 import {Keyboard, StyleSheet, TouchableWithoutFeedback, View} from "react-native";
-import {filterOpenVar, searchOpenVar, sortOpenVar} from "../Store";
+import {filterOpenVar, popupOpenVar, searchOpenVar, sortOpenVar} from "../Store";
 
 const styles = StyleSheet.create({
     backdrop: {
@@ -9,25 +9,28 @@ const styles = StyleSheet.create({
         top: 0,
         left: 0,
         backgroundColor: "#000000",
-        opacity: 0.5,
+        opacity: 0.6,
         zIndex: 1,
         height: "100%",
         width: "100%"
     }
 });
 
-function Backdrop(): JSX.Element {
+function Backdrop(): JSX.Element | null {
     // Get open values from store to check which element is open
     const sortOpen = useReactiveVar(sortOpenVar);
     const searchOpen = useReactiveVar(searchOpenVar);
     const filterOpen = useReactiveVar(filterOpenVar);
+    const popupOpen = useReactiveVar(popupOpenVar);
 
     // Close foreground element when backdrop is clicked
     const close = () => {
         // Hide keyboard
         Keyboard.dismiss();
 
-        if (filterOpen) {
+        if (popupOpen) {
+            popupOpenVar(false);
+        } else if (filterOpen) {
             filterOpenVar(false);
         } else if (sortOpen) {
             sortOpenVar(false);
@@ -36,20 +39,23 @@ function Backdrop(): JSX.Element {
         }
     };
 
-    return (
-        <TouchableWithoutFeedback onPress={close}>
-            <View
-                style={[
-                    styles.backdrop,
-                    {
-                        display: sortOpen || searchOpen || filterOpen ? "flex" : "none",
-                        // When filter is open, backdrop should be over the header
-                        zIndex: filterOpen ? 4 : 1
-                    }
-                ]}
-            ></View>
-        </TouchableWithoutFeedback>
-    );
+    if (sortOpen || searchOpen || filterOpen || popupOpen) {
+        return (
+            <TouchableWithoutFeedback onPress={close}>
+                <View
+                    style={[
+                        styles.backdrop,
+                        {
+                            // When filter or movie popup is open, the backdrop should be over the header
+                            zIndex: filterOpen || popupOpen ? 4 : 1
+                        }
+                    ]}
+                ></View>
+            </TouchableWithoutFeedback>
+        );
+    } else {
+        return null;
+    }
 }
 
 export default Backdrop;

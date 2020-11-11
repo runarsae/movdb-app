@@ -15,6 +15,9 @@ export interface FilterType {
     runtimeInterval: Interval;
 }
 
+// Decalartion of reactive variables
+// Can be accessed directly and changed in every component that imports them
+
 export const searchOpenVar = makeVar<boolean>(false);
 export const searchVar = makeVar<string>("");
 
@@ -23,12 +26,19 @@ export const sortVar = makeVar<SortType>("rating");
 export const sortDirectionVar = makeVar<SortDirectionType>("DESC");
 
 export const filterOpenVar = makeVar<boolean>(false);
-export const filterVar = makeVar<FilterType | null>(null);
+// Temporary filter values; used while filter menu is open,
+// set as real filter values when filter menu is closed
 export const filterTempVar = makeVar<FilterType | null>(null);
+// Real filter values; used by movie container
+export const filterVar = makeVar<FilterType | null>(null);
+
+export const popupOpenVar = makeVar<boolean>(false);
+export const popupMovieVar = makeVar<string>("");
 
 export const cache = new InMemoryCache({
     typePolicies: {
         Query: {
+            // Define the fields in the store and how to read them
             fields: {
                 searchOpen: {
                     read() {
@@ -63,6 +73,16 @@ export const cache = new InMemoryCache({
                 filter: {
                     read() {
                         return filterVar();
+                    }
+                },
+                popupOpen: {
+                    read() {
+                        return popupOpenVar();
+                    }
+                },
+                popupMovieVar: {
+                    read() {
+                        return popupMovieVar();
                     }
                 }
             }
