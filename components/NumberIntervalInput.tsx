@@ -31,7 +31,7 @@ interface Props {
     value: Interval;
 }
 
-function NumberIntervalInput(props: Props) {
+function NumberIntervalInput(props: Props): JSX.Element {
     const {colors} = useTheme();
 
     const [interval, setInterval] = useState<Interval>(props.value);

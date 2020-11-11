@@ -28,14 +28,16 @@ const styles = StyleSheet.create({
         paddingHorizontal: 8
     },
     chip: {
-        marginBottom: 8
+        marginBottom: 8,
+        marginRight: 8,
+        borderWidth: 0
+    },
+    chipText: {
+        marginBottom: -2,
+        marginTop: 0
     },
     chipMarginRight: {
         marginRight: 8
-    },
-    chipText: {
-        marginVertical: 0,
-        paddingTop: 2
     }
 });
 
@@ -91,7 +93,7 @@ function Sort(): JSX.Element {
             ]}
             onLayout={(event) => {
                 // Get height of sort bar
-                var {height} = event.nativeEvent.layout;
+                const {height} = event.nativeEvent.layout;
                 if (Math.abs(height - sortHeight) > 2) {
                     setSortHeight(height);
                 }

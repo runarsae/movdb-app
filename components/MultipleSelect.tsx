@@ -26,7 +26,7 @@ interface Props {
     value: string[];
 }
 
-function MultipleSelect(props: Props) {
+function MultipleSelect(props: Props): JSX.Element {
     const {colors} = useTheme();
 
     // List of all selected elements

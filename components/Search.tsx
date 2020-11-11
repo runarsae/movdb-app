@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
     subbar: {
         position: "absolute",
         width: "100%",
+        right: 0,
         zIndex: 2
     },
     container: {
@@ -88,7 +89,7 @@ function Search(): JSX.Element {
             ]}
             onLayout={(event) => {
                 // Get height of search bar
-                var {height} = event.nativeEvent.layout;
+                const {height} = event.nativeEvent.layout;
                 if (height !== searchHeight) {
                     setSearchHeight(height);
                 }
