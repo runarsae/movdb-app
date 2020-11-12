@@ -28,15 +28,15 @@ function Backdrop(): JSX.Element | null {
         // Hide keyboard
         Keyboard.dismiss();
 
-        if (popupOpen) {
-            popupOpenVar(false);
-        } else if (filterOpen) {
+        if (filterOpen) {
             filterOpenVar(false);
         } else if (sortOpen) {
             sortOpenVar(false);
         } else if (searchOpen) {
             searchOpenVar(false);
         }
+
+        // Movie popup closing is handled in the component itself, because its scroll view covers the backdrop
     };
 
     if (sortOpen || searchOpen || filterOpen || popupOpen) {

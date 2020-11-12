@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useQuery, useReactiveVar} from "@apollo/client";
 import {popupMovieVar, popupOpenVar} from "../../Store";
 import {MOVIE, Movie} from "../../Queries";
-import {StyleSheet, ActivityIndicator, ScrollView, View, Dimensions} from "react-native";
+import {StyleSheet, ActivityIndicator, ScrollView, View, Dimensions, TouchableWithoutFeedback} from "react-native";
 import {Caption, Card, IconButton, Paragraph, Title, useTheme, Text, Divider, Avatar} from "react-native-paper";
 import ChipContainer from "./ChipContainer";
 import {getStatusBarHeight} from "react-native-status-bar-height";
@@ -20,6 +20,11 @@ const styles = StyleSheet.create({
         paddingBottom: 15,
         width: "100%",
         alignItems: "center"
+    },
+    touchable: {
+        position: "absolute",
+        width: "100%",
+        height: "100%"
     },
     card: {
         width: "100%",
@@ -130,6 +135,12 @@ function MoviePopup(): JSX.Element | null {
                     alignCenter || !movie ? {justifyContent: "center", height: "100%"} : {justifyContent: "flex-start"}
                 ]}
             >
+                {/* ScrollView overlaps the backdrop component. A touchable that covers 
+                the whole screen is necessary to close the popup on backdrop click */}
+                <TouchableWithoutFeedback onPress={() => popupOpenVar(false)}>
+                    <View style={styles.touchable}></View>
+                </TouchableWithoutFeedback>
+
                 {movie ? (
                     <Card
                         style={styles.card}
