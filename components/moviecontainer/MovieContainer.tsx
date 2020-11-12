@@ -125,9 +125,9 @@ function MovieContainer(): JSX.Element {
         }
     };
 
-    // Calculates if scrolling has reached the end (with a threshold of 400)
+    // Calculates if scrolling has reached the end (with a threshold of 1000px)
     const endReached = ({layoutMeasurement, contentOffset, contentSize}: NativeScrollEvent) => {
-        const threshold = 600;
+        const threshold = 1000;
 
         return layoutMeasurement.height + contentOffset.y >= contentSize.height - threshold;
     };
