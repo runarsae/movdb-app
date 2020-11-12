@@ -105,6 +105,7 @@ function Search(): JSX.Element {
                         style={[styles.input, {color: colors.text}]}
                         selectionColor={colors.primary}
                         placeholder="Search"
+                        placeholderTextColor={colors.placeholder}
                         onChangeText={(text) => setSearchText(text)}
                         value={searchText}
                         onSubmitEditing={handleSubmit}
