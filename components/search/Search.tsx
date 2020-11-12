@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import {useReactiveVar} from "@apollo/client";
 import {StyleSheet, View, TextInput, NativeSyntheticEvent, TextInputKeyPressEventData} from "react-native";
-import {Avatar, Surface, useTheme} from "react-native-paper";
+import {Avatar, IconButton, Surface, useTheme} from "react-native-paper";
 import * as Animatable from "react-native-animatable";
 import {searchVar, searchOpenVar} from "../../Store";
 import {getStatusBarHeight} from "react-native-status-bar-height";
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#383838",
         borderRadius: 4,
         paddingLeft: 44,
-        paddingRight: 12
+        paddingRight: 34
     },
     searchIcon: {
         backgroundColor: "transparent",
@@ -35,6 +35,14 @@ const styles = StyleSheet.create({
         position: "absolute",
         left: 6,
         top: 2,
+        zIndex: 1
+    },
+    clearIcon: {
+        position: "absolute",
+        right: 0,
+        top: 0,
+        height: 24,
+        width: 24,
         zIndex: 1
     }
 });
@@ -112,6 +120,15 @@ function Search(): JSX.Element {
                         onKeyPress={handleKeyDown}
                         blurOnSubmit
                     />
+                    {searchText.length > 0 && (
+                        <IconButton
+                            icon="close"
+                            size={18}
+                            color={colors.text}
+                            style={styles.clearIcon}
+                            onPress={() => setSearchText("")}
+                        />
+                    )}
                 </View>
             </Surface>
         </Animatable.View>
