@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from "react";
 import {useQuery, useReactiveVar} from "@apollo/client";
 import {FilterOptions, FILTER_OPTIONS} from "../../Queries";
-import {Dimensions, Keyboard, KeyboardAvoidingView, ScaledSize, ScrollView, StyleSheet, View} from "react-native";
+import {Dimensions, ScaledSize, ScrollView, StyleSheet, View} from "react-native";
 import {filterOpenVar, filterTempVar, FilterType, filterVar, Interval} from "../../Store";
 import * as Animatable from "react-native-animatable";
 import {getStatusBarHeight} from "react-native-status-bar-height";
 import {Button, Headline, IconButton, Subheading, Surface, useTheme} from "react-native-paper";
 import MultipleSelect from "./MultipleSelect";
-import NumberIntervalInput from "./NumberIntervalInput";
+import RangeSlider from "./RangeSlider";
 
 const styles = StyleSheet.create({
     drawer: {
@@ -27,13 +27,13 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "space-between",
         paddingHorizontal: 30,
-        paddingBottom: 30
+        paddingBottom: 15
     },
     closeButton: {
         margin: 0
     },
     marginVertical: {
-        marginVertical: 20
+        marginVertical: 15
     },
     subheading: {
         marginBottom: 10
@@ -42,12 +42,15 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "center",
         width: "100%",
-        marginVertical: 40
+        marginVertical: 15
     }
 });
 
 function Filter(): JSX.Element {
     const {colors} = useTheme();
+
+    // Boolean used to disable scrolling of menu when range sliders are in use
+    const [scrollEnabled, setScrollEnabled] = useState<boolean>(true);
 
     // Window width used to decide when filter menu should cover the whole width
     const [windowWidth, setWindowWidth] = useState<number>(Dimensions.get("window").width);
@@ -60,7 +63,7 @@ function Filter(): JSX.Element {
     const filterTemp = useReactiveVar(filterTempVar);
     const filter = useReactiveVar(filterVar);
 
-    // Get filter options from backend
+    // Get filter options from backend, and use them to set default values
     const {data: filterOptionsData} = useQuery<FilterOptions>(FILTER_OPTIONS, {
         onCompleted: () => {
             setDefaultFilterValues(false);
@@ -95,11 +98,6 @@ function Filter(): JSX.Element {
             }
         }
     };
-
-    // When filter options are fetched, use them to set default values (in store)
-    useEffect(() => {
-        //setDefaultFilterValues(false);
-    }, [filterOptionsData]);
 
     // Update temporary filter values for the given type
     const updateFilterTemp = (
@@ -158,7 +156,7 @@ function Filter(): JSX.Element {
             {
                 // When filter options are fetched, the filter menu can be displayed
                 filterOptionsData && filterTemp && (
-                    <Surface style={[styles.container, {paddingTop: 30 + getStatusBarHeight()}]}>
+                    <Surface style={[styles.container, {paddingTop: 15 + getStatusBarHeight()}]}>
                         <View style={styles.header}>
                             <Headline style={{fontSize: 22}}>Filter</Headline>
                             <IconButton
@@ -166,80 +164,78 @@ function Filter(): JSX.Element {
                                 style={[styles.closeButton]}
                                 color={colors.text}
                                 onPress={() => {
-                                    Keyboard.dismiss();
                                     filterOpenVar(false);
                                 }}
                             />
                         </View>
 
-                        {/* KeyboardAvoidingView is used to scroll input fields into visible area when focused */}
-                        <KeyboardAvoidingView
-                            behavior="position"
-                            style={{flex: 1, flexDirection: "column", overflow: "hidden"}}
-                        >
-                            <ScrollView style={{paddingHorizontal: 30}}>
-                                <View>
-                                    <View style={{marginBottom: 20}}>
-                                        <Subheading style={[styles.subheading, {color: colors.primary}]}>
-                                            Genres
-                                        </Subheading>
-                                        <MultipleSelect
-                                            options={filterOptionsData.menuOptions.genres}
-                                            value={filterTemp.genres}
-                                            onChangeSelect={(select: string[]) => updateFilterTemp("genres", select)}
-                                        />
-                                    </View>
-
-                                    <View style={styles.marginVertical}>
-                                        <Subheading style={[styles.subheading, {color: colors.primary}]}>
-                                            Release year
-                                        </Subheading>
-                                        <NumberIntervalInput
-                                            min={filterOptionsData.menuOptions.releaseDateInterval.start}
-                                            max={filterOptionsData.menuOptions.releaseDateInterval.end}
-                                            value={filterTemp.releaseDateInterval}
-                                            onChangeInterval={(interval: Interval) =>
-                                                updateFilterTemp("releaseDateInterval", interval)
-                                            }
-                                        />
-                                    </View>
-
-                                    <View style={styles.marginVertical}>
-                                        <Subheading style={[styles.subheading, {color: colors.primary}]}>
-                                            Runtime
-                                        </Subheading>
-                                        <NumberIntervalInput
-                                            min={filterOptionsData.menuOptions.runtimeInterval.start}
-                                            max={filterOptionsData.menuOptions.runtimeInterval.end}
-                                            value={filterTemp.runtimeInterval}
-                                            onChangeInterval={(interval: Interval) =>
-                                                updateFilterTemp("runtimeInterval", interval)
-                                            }
-                                        />
-                                    </View>
-
-                                    <View style={[styles.buttonContainer]}>
-                                        <Button
-                                            mode="text"
-                                            style={{marginRight: 10}}
-                                            color={colors.accent}
-                                            onPress={() => setDefaultFilterValues(true)}
-                                        >
-                                            Reset
-                                        </Button>
-                                        <Button
-                                            mode="contained"
-                                            onPress={() => {
-                                                Keyboard.dismiss();
-                                                filterOpenVar(false);
-                                            }}
-                                        >
-                                            Apply
-                                        </Button>
-                                    </View>
+                        <ScrollView style={{paddingHorizontal: 30}} scrollEnabled={scrollEnabled}>
+                            <View>
+                                <View style={{marginBottom: 15}}>
+                                    <Subheading style={[styles.subheading, {color: colors.primary}]}>Genres</Subheading>
+                                    <MultipleSelect
+                                        options={filterOptionsData.menuOptions.genres}
+                                        value={filterTemp.genres}
+                                        onChangeSelect={(select: string[]) => updateFilterTemp("genres", select)}
+                                    />
                                 </View>
-                            </ScrollView>
-                        </KeyboardAvoidingView>
+
+                                <View style={styles.marginVertical}>
+                                    <Subheading style={[styles.subheading, {color: colors.primary}]}>
+                                        Release year
+                                    </Subheading>
+                                    <RangeSlider
+                                        min={filterOptionsData.menuOptions.releaseDateInterval.start}
+                                        max={filterOptionsData.menuOptions.releaseDateInterval.end}
+                                        value={filterTemp.releaseDateInterval}
+                                        onChangeInterval={(interval: Interval) =>
+                                            updateFilterTemp("releaseDateInterval", interval)
+                                        }
+                                        scrollEnabled={(scrollEnabled) => {
+                                            setScrollEnabled(scrollEnabled);
+                                        }}
+                                        width={filterWidth - 60}
+                                    />
+                                </View>
+
+                                <View style={styles.marginVertical}>
+                                    <Subheading style={[styles.subheading, {color: colors.primary}]}>
+                                        Runtime
+                                    </Subheading>
+                                    <RangeSlider
+                                        min={filterOptionsData.menuOptions.runtimeInterval.start}
+                                        max={filterOptionsData.menuOptions.runtimeInterval.end}
+                                        value={filterTemp.runtimeInterval}
+                                        onChangeInterval={(interval: Interval) =>
+                                            updateFilterTemp("runtimeInterval", interval)
+                                        }
+                                        scrollEnabled={(scrollEnabled) => {
+                                            setScrollEnabled(scrollEnabled);
+                                        }}
+                                        width={filterWidth - 60}
+                                    />
+                                </View>
+
+                                <View style={[styles.buttonContainer]}>
+                                    <Button
+                                        mode="text"
+                                        style={{marginRight: 10}}
+                                        color={colors.accent}
+                                        onPress={() => setDefaultFilterValues(true)}
+                                    >
+                                        Reset
+                                    </Button>
+                                    <Button
+                                        mode="contained"
+                                        onPress={() => {
+                                            filterOpenVar(false);
+                                        }}
+                                    >
+                                        Apply
+                                    </Button>
+                                </View>
+                            </View>
+                        </ScrollView>
                     </Surface>
                 )
             }
