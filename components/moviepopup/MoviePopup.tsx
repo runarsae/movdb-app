@@ -7,6 +7,7 @@ import {Caption, Card, IconButton, Paragraph, Title, useTheme, Text, Divider, Av
 import ChipContainer from "./ChipContainer";
 import {getStatusBarHeight} from "react-native-status-bar-height";
 import {format} from "date-fns";
+import YoutubePlayer from "react-native-youtube-iframe";
 
 const styles = StyleSheet.create({
     wrapper: {
@@ -62,17 +63,14 @@ const styles = StyleSheet.create({
         textAlignVertical: "bottom"
     },
     paragraph: {
-        paddingTop: 16,
-        marginTop: 0,
         marginBottom: 0
     },
-    divider: {
-        marginTop: 16
-    },
     subtitle: {
-        paddingTop: 16,
         fontWeight: "bold",
         color: "#C2C2C2"
+    },
+    marginTop: {
+        marginTop: 16
     }
 });
 
@@ -90,6 +88,8 @@ function UndertitleField(props: {icon: string; text: string}): JSX.Element {
 
 function MoviePopup(): JSX.Element | null {
     const {colors} = useTheme();
+
+    const [popupWidth, setPopupWidth] = useState<number>(0);
 
     // Boolean used to decide how to vertically align the popup
     const [alignCenter, setAlignCenter] = useState<boolean | undefined>(false);
@@ -145,11 +145,15 @@ function MoviePopup(): JSX.Element | null {
                     <Card
                         style={styles.card}
                         onLayout={(event) => {
-                            const height = event.nativeEvent.layout.height;
+                            const {width, height} = event.nativeEvent.layout;
                             const windowHeight = Dimensions.get("window").height;
 
                             // If height of card (+ padding) is smaller than the window height, center it vertically
                             height + 30 < windowHeight ? setAlignCenter(true) : setAlignCenter(false);
+
+                            if (width != popupWidth) {
+                                setPopupWidth(width);
+                            }
                         }}
                     >
                         <Card.Content>
@@ -179,16 +183,29 @@ function MoviePopup(): JSX.Element | null {
 
                             <ChipContainer array={movie.genres!} chipBackgroundColor={colors.primary} />
 
-                            <Paragraph style={styles.paragraph}>{movie.overview!}</Paragraph>
+                            <View style={styles.marginTop}>
+                                <YoutubePlayer
+                                    initialPlayerParams={{modestbranding: true, rel: false, loop: true}}
+                                    videoId={movie.trailer!}
+                                    height={((popupWidth - 32) / 16) * 9} // 16:9
+                                    play
+                                    mute
+                                    webViewStyle={{
+                                        borderRadius: 4
+                                    }}
+                                />
+                            </View>
 
-                            <Divider style={styles.divider} />
+                            <Paragraph style={[styles.paragraph, styles.marginTop]}>{movie.overview!}</Paragraph>
 
-                            <Text style={[styles.subtitle]}>
+                            <Divider style={styles.marginTop} />
+
+                            <Text style={[styles.subtitle, styles.marginTop]}>
                                 Production {movie.production_companies!.length === 1 ? "company" : "companies"}
                             </Text>
                             <ChipContainer array={movie.production_companies!} chipBackgroundColor="none" />
 
-                            <Text style={[styles.subtitle]}>
+                            <Text style={[styles.subtitle, styles.marginTop]}>
                                 Production {movie.production_countries!.length === 1 ? "country" : "countries"}
                             </Text>
                             <ChipContainer
