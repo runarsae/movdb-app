@@ -56,6 +56,7 @@ function Search(): JSX.Element {
     const [searchHeight, setSearchHeight] = useState<number>(68);
 
     const searchOpen = useReactiveVar(searchOpenVar);
+    const search = useReactiveVar(searchVar);
 
     // Reference to search field
     const searchRef = useRef<TextInput | null>(null);
@@ -84,6 +85,13 @@ function Search(): JSX.Element {
             handleSubmit();
         }
     };
+
+    // Submit when search bar is closed by outside component (backdrop)
+    useEffect(() => {
+        if (!searchOpen && searchText !== search) {
+            handleSubmit();
+        }
+    }, [searchOpen]);
 
     return (
         <Animatable.View
