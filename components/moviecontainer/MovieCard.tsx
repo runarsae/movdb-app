@@ -1,6 +1,6 @@
 import React, {memo} from "react";
 import {StyleSheet, Text, TouchableHighlight, View, Image} from "react-native";
-import {Card, useTheme} from "react-native-paper";
+import {Avatar, Card, useTheme} from "react-native-paper";
 import {popupMovieVar, popupOpenVar} from "../../Store";
 
 const styles = StyleSheet.create({
@@ -21,30 +21,26 @@ const styles = StyleSheet.create({
         position: "absolute",
         right: 4,
         bottom: 4,
-        width: 28,
-        padding: 4,
-        borderRadius: 4
+        flexDirection: "row",
+        alignItems: "center",
+        paddingVertical: 4,
+        paddingRight: 4,
+        paddingLeft: 3,
+        borderRadius: 4,
+        backgroundColor: "rgba(0, 0, 0, 0.7)"
+    },
+    ratingIcon: {
+        backgroundColor: "transparent",
+        paddingTop: 2,
+        marginRight: 2,
+        width: 12,
+        height: 14
     },
     ratingText: {
         color: "white",
-        fontSize: 12,
-        textAlign: "center"
+        fontSize: 12
     }
 });
-
-// Rating colors from red (1) to green (10)
-const ratingColors = [
-    "#d23600",
-    "#c64d00",
-    "#b95f00",
-    "#ab6d00",
-    "#9c7900",
-    "#8c8300",
-    "#7b8c00",
-    "#6a9410",
-    "#589a2f",
-    "#43a047"
-];
 
 interface Props {
     imdbID: string;
@@ -70,7 +66,8 @@ function MovieCard(props: Props): JSX.Element {
             >
                 <View>
                     <Image style={[styles.moviePoster, {backgroundColor: colors.surface}]} source={{uri: posterURL}} />
-                    <View style={[styles.ratingBox, {backgroundColor: ratingColors[Math.round(props.rating) - 1]}]}>
+                    <View style={styles.ratingBox}>
+                        <Avatar.Icon icon="star" color={colors.primary} style={styles.ratingIcon} size={18} />
                         <Text style={styles.ratingText}>{props.rating}</Text>
                     </View>
                 </View>
