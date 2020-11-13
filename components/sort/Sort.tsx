@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useReactiveVar} from "@apollo/client";
-import {StyleSheet, View} from "react-native";
+import {ScrollView, StyleSheet} from "react-native";
 import {Surface, Chip, useTheme} from "react-native-paper";
 import {searchVar, sortDirectionVar, sortOpenVar, sortVar, SortType, SortDirectionType} from "../../Store";
 import * as Animatable from "react-native-animatable";
@@ -15,32 +15,22 @@ const styles = StyleSheet.create({
         zIndex: 2
     },
     container: {
-        padding: 8,
+        padding: 16,
         width: "100%",
         display: "flex",
         flexDirection: "row",
         flexWrap: "wrap",
         justifyContent: "space-between"
     },
-    chipContainer: {
-        display: "flex",
-        flexDirection: "row",
-        flexWrap: "wrap",
-        maxWidth: "100%",
-        paddingTop: 8,
-        paddingHorizontal: 8
-    },
     chip: {
-        marginBottom: 8,
-        marginRight: 8,
         borderWidth: 0
+    },
+    chipMarginRight: {
+        marginRight: 8
     },
     chipText: {
         marginBottom: -2,
         marginTop: 0
-    },
-    chipMarginRight: {
-        marginRight: 8
     }
 });
 
@@ -105,7 +95,7 @@ function Sort(): JSX.Element {
             }}
         >
             <Surface style={styles.container}>
-                <View style={styles.chipContainer}>
+                <ScrollView style={{marginBottom: 16}} horizontal={true} showsHorizontalScrollIndicator={false}>
                     <Chip
                         icon="star"
                         style={[
@@ -157,9 +147,9 @@ function Sort(): JSX.Element {
                     >
                         Release date
                     </Chip>
-                </View>
+                </ScrollView>
 
-                <View style={styles.chipContainer}>
+                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                     <Chip
                         icon="arrow-up"
                         style={[
@@ -188,7 +178,7 @@ function Sort(): JSX.Element {
                     >
                         DESC
                     </Chip>
-                </View>
+                </ScrollView>
             </Surface>
         </Animatable.View>
     );
