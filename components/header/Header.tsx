@@ -48,7 +48,7 @@ function Header(): JSX.Element {
                 <Appbar.Content title="MovDB" color={colors.primary} />
                 <Appbar.Action icon="magnify" color={colors.primary} onPress={toggleSearch} />
                 <Appbar.Action icon="swap-vertical" color={colors.primary} onPress={toggleSort} />
-                <Appbar.Action icon="dots-vertical" color={colors.primary} onPress={toggleFilter} />
+                <Appbar.Action icon="tune" color={colors.primary} onPress={toggleFilter} />
             </Appbar.Header>
         </View>
     );
