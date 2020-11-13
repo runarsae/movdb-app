@@ -1,5 +1,5 @@
 import React from "react";
-import {StyleSheet, View, Platform} from "react-native";
+import {StyleSheet, View} from "react-native";
 import {DefaultTheme, Provider as ThemeProvider} from "react-native-paper";
 import {ApolloClient, ApolloProvider, NormalizedCacheObject} from "@apollo/client";
 import {cache} from "./Store";
@@ -11,43 +11,8 @@ import MoviePopup from "./components/moviepopup/MoviePopup";
 import Search from "./components/search/Search";
 import Sort from "./components/sort/Sort";
 
-// Web styling: Remove outline of input elements and style scroll bars
-const injectWebCss = () => {
-    if (Platform.OS === "web") {
-        const style = document.createElement("style");
-        style.textContent = `
-            textarea, select, input, button {
-                outline: none !important;
-            }
-            
-            ::-webkit-scrollbar {
-                width: 6px;
-                height: 4px;
-            }
-
-            ::-webkit-scrollbar-track {
-                background-color: transparent;
-            }
-
-            ::-webkit-scrollbar-thumb {
-                background-color: #505050;
-                border-radius: 4px;
-            }
-            
-            ::-webkit-scrollbar-thumb:hover {
-                background-color: #3D3D3D;
-            }
-            
-        `;
-
-        return document.head.append(style);
-    }
-};
-
-injectWebCss();
-
-// Root element styling
 const styles = StyleSheet.create({
+    // Root element styling
     wrapper: {
         backgroundColor: "#111010",
         width: "100%",
