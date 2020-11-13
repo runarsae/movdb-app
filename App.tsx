@@ -14,7 +14,7 @@ import Sort from "./components/sort/Sort";
 const styles = StyleSheet.create({
     // Root element styling
     wrapper: {
-        backgroundColor: "#111010",
+        backgroundColor: "#121212",
         width: "100%",
         height: 0,
         overflow: "hidden",
