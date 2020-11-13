@@ -45,10 +45,10 @@ function Header(): JSX.Element {
     return (
         <View style={{zIndex: 3}}>
             <Appbar.Header style={{backgroundColor: colors.surface}}>
-                <Appbar.Content title="MovDB" color={colors.primary} />
+                <Appbar.Content titleStyle={{fontSize: 22}} title="MovDB" color={colors.primary} />
                 <Appbar.Action icon="magnify" color={colors.primary} onPress={toggleSearch} />
                 <Appbar.Action icon="swap-vertical" color={colors.primary} onPress={toggleSort} />
-                <Appbar.Action icon="dots-vertical" color={colors.primary} onPress={toggleFilter} />
+                <Appbar.Action icon="tune" color={colors.primary} onPress={toggleFilter} />
             </Appbar.Header>
         </View>
     );

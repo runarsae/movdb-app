@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useQuery, useReactiveVar} from "@apollo/client";
 import {popupMovieVar, popupOpenVar} from "../../Store";
 import {MOVIE, Movie} from "../../Queries";
-import {StyleSheet, ActivityIndicator, ScrollView, View, Dimensions, TouchableWithoutFeedback} from "react-native";
+import {StyleSheet, ActivityIndicator, ScrollView, View} from "react-native";
 import {Caption, Card, IconButton, Paragraph, Title, useTheme, Text, Divider, Avatar} from "react-native-paper";
 import ChipContainer from "./ChipContainer";
 import {getStatusBarHeight} from "react-native-status-bar-height";
@@ -91,9 +91,6 @@ function MoviePopup(): JSX.Element | null {
 
     const [popupWidth, setPopupWidth] = useState<number>(0);
 
-    // Boolean used to decide how to vertically align the popup
-    const [alignCenter, setAlignCenter] = useState<boolean | undefined>(false);
-
     const popupOpen = useReactiveVar(popupOpenVar);
     const popupMovie = useReactiveVar(popupMovieVar);
 
@@ -112,12 +109,11 @@ function MoviePopup(): JSX.Element | null {
         }
     }, [data]);
 
-    // When popup closes, clear movie data and alignment
+    // When popup closes, clear movie data
     useEffect(() => {
         if (!popupOpen) {
             setMovie(undefined);
             popupMovieVar(undefined);
-            setAlignCenter(undefined);
         }
     }, [popupOpen]);
 
@@ -128,28 +124,15 @@ function MoviePopup(): JSX.Element | null {
                 contentContainerStyle={[
                     styles.container,
                     {paddingTop: 15 + getStatusBarHeight()},
-                    // If alignment is not decided yet, make the view invisible
-                    {opacity: typeof alignCenter === "undefined" && movie ? 0 : 1},
-
-                    // Center vertically if alignCenter is true or if the movie is loading (centers loading icon)
-                    alignCenter || !movie ? {justifyContent: "center", height: "100%"} : {justifyContent: "flex-start"}
+                    // Loading icon is vertically aligned center and popup card is aligned at flex-start
+                    !movie ? {justifyContent: "center", height: "100%"} : {justifyContent: "flex-start"}
                 ]}
             >
-                {/* ScrollView overlaps the backdrop component. A touchable that covers 
-                the whole screen is necessary to close the popup on backdrop click */}
-                <TouchableWithoutFeedback onPress={() => popupOpenVar(false)}>
-                    <View style={styles.touchable}></View>
-                </TouchableWithoutFeedback>
-
                 {movie ? (
                     <Card
                         style={styles.card}
                         onLayout={(event) => {
-                            const {width, height} = event.nativeEvent.layout;
-                            const windowHeight = Dimensions.get("window").height;
-
-                            // If height of card (+ padding) is smaller than the window height, center it vertically
-                            height + 30 < windowHeight ? setAlignCenter(true) : setAlignCenter(false);
+                            const {width} = event.nativeEvent.layout;
 
                             if (width != popupWidth) {
                                 setPopupWidth(width);

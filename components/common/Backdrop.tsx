@@ -35,8 +35,6 @@ function Backdrop(): JSX.Element | null {
         } else if (searchOpen) {
             searchOpenVar(false);
         }
-
-        // Movie popup closing is handled in the component itself, because its scroll view covers the backdrop
     };
 
     if (sortOpen || searchOpen || filterOpen || popupOpen) {
