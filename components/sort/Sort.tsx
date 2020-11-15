@@ -34,6 +34,9 @@ const styles = StyleSheet.create({
     }
 });
 
+/*
+ *  Sort bar component with selectable chips (checkboxes).
+ */
 function Sort(): JSX.Element {
     const {colors} = useTheme();
 

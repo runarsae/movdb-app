@@ -46,6 +46,9 @@ const styles = StyleSheet.create({
     }
 });
 
+/*
+ *  Filter menu component that contains options for genres, release year and runtime.
+ */
 function Filter(): JSX.Element {
     const {colors} = useTheme();
 

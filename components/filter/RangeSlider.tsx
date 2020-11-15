@@ -5,7 +5,7 @@ import {Surface, useTheme} from "react-native-paper";
 import {Interval} from "../../Store";
 
 /*
- *   Custom knob component for range slider
+ *   Custom knob component for the range slider.
  */
 function Marker(props: MarkerProps): JSX.Element {
     const {colors} = useTheme();
@@ -67,6 +67,9 @@ interface Props {
     width: number;
 }
 
+/*
+ *   Range slider component for choosing an interval of continuous values.
+ */
 function RangeSlider(props: Props): JSX.Element {
     const {colors} = useTheme();
 

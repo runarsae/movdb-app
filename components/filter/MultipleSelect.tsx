@@ -26,6 +26,9 @@ interface Props {
     value: string[];
 }
 
+/*
+ *   A multiple select component that generates chips (works as checkboxes) for each possible selection value.
+ */
 function MultipleSelect(props: Props): JSX.Element {
     const {colors} = useTheme();
 

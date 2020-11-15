@@ -4,6 +4,9 @@ import {Appbar, useTheme} from "react-native-paper";
 import {filterOpenVar, searchOpenVar, sortOpenVar} from "../../Store";
 import {View} from "react-native";
 
+/*
+ *  Header component for title and menu buttons.
+ */
 function Header(): JSX.Element {
     const {colors} = useTheme();
 
