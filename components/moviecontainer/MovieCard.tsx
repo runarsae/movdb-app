@@ -49,6 +49,9 @@ interface Props {
     rating: number;
 }
 
+/*
+ *  Movie card component with poster image as background and rating in the right corner.
+ */
 function MovieCard(props: Props): JSX.Element {
     const {colors} = useTheme();
 

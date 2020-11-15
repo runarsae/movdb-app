@@ -16,6 +16,10 @@ const styles = StyleSheet.create({
     }
 });
 
+/*
+ *  A black color overlay component with opacity, used to fade out background elements.
+ *  Can be clicked to close foreground elements.
+ */
 function Backdrop(): JSX.Element | null {
     // Get open values from store to check which element is open
     const sortOpen = useReactiveVar(sortOpenVar);
@@ -46,7 +50,7 @@ function Backdrop(): JSX.Element | null {
                     style={[
                         styles.backdrop,
                         {
-                            // When filter or movie popup is open, the backdrop should be over the header
+                            // When filter or movie popup is open, the backdrop is over the header
                             zIndex: filterOpen || popupOpen ? 4 : 1
                         }
                     ]}

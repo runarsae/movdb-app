@@ -25,6 +25,9 @@ interface Props {
     chipBackgroundColor: string;
 }
 
+/*
+ *  Chip container component that generates an array of chips from the given values.
+ */
 function ChipContainer(props: Props): JSX.Element {
     const {colors} = useTheme();
 

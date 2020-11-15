@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
 });
 
 /*
- *   Field with an icon and text, used under the title of the popup
+ *   Field with an icon and text, used under the title of the popup.
  */
 function UndertitleField(props: {icon: string; text: string}): JSX.Element {
     return (
@@ -90,6 +90,9 @@ function UndertitleField(props: {icon: string; text: string}): JSX.Element {
     );
 }
 
+/*
+ *  Movie popup component containing more information of the chosen movie and its trailer.
+ */
 function MoviePopup(): JSX.Element | null {
     const {colors} = useTheme();
 

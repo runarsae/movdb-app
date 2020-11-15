@@ -1,5 +1,5 @@
 /*
- *    Queries to backend with types
+ *    Queries to backend (with argument and return types)
  */
 
 import gql from "graphql-tag";

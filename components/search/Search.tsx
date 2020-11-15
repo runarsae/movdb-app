@@ -47,6 +47,9 @@ const styles = StyleSheet.create({
     }
 });
 
+/*
+ *  Search bar component with text input field.
+ */
 function Search(): JSX.Element {
     const {colors} = useTheme();
 

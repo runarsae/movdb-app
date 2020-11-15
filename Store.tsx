@@ -1,3 +1,7 @@
+/*
+ *  Local state management. Declaration of fields and type definitions.
+ */
+
 import {InMemoryCache, makeVar} from "@apollo/client";
 
 export type SortType = "rating" | "original_title" | "runtime" | "release_date" | "none";
@@ -26,9 +30,11 @@ export const sortVar = makeVar<SortType>("rating");
 export const sortDirectionVar = makeVar<SortDirectionType>("DESC");
 
 export const filterOpenVar = makeVar<boolean>(false);
+
 // Temporary filter values; used while filter menu is open,
 // set as real filter values when filter menu is closed
 export const filterTempVar = makeVar<FilterType | null>(null);
+
 // Real filter values; used by movie container
 export const filterVar = makeVar<FilterType | null>(null);
 

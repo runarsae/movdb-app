@@ -29,6 +29,10 @@ const styles = StyleSheet.create({
     }
 });
 
+/*
+ *  Movie container for movie cards.
+ *  Displays matching movies (according to search, sort and filter) in a paginated infinite scrollable list.
+ */
 function MovieContainer(): JSX.Element {
     const {colors} = useTheme();
 
