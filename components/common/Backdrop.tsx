@@ -28,7 +28,9 @@ function Backdrop(): JSX.Element | null {
         // Hide keyboard
         Keyboard.dismiss();
 
-        if (filterOpen) {
+        if (popupOpen) {
+            popupOpenVar(false);
+        } else if (filterOpen) {
             filterOpenVar(false);
         } else if (sortOpen) {
             sortOpenVar(false);

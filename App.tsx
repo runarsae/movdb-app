@@ -1,5 +1,5 @@
 import React from "react";
-import {StyleSheet, View} from "react-native";
+import {StatusBar, StyleSheet, View} from "react-native";
 import {DefaultTheme, Provider as ThemeProvider} from "react-native-paper";
 import {ApolloClient, ApolloProvider, NormalizedCacheObject} from "@apollo/client";
 import {cache} from "./Store";
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     wrapper: {
         backgroundColor: "#121212",
         width: "100%",
-        height: 0,
+        height: "100%",
         overflow: "hidden",
         flex: 1
     }
@@ -41,6 +41,9 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
     uri: "http://it2810-23.idi.ntnu.no:3000/",
     cache: cache
 });
+
+// Set status bar content to a light color
+StatusBar.setBarStyle("light-content", true);
 
 export default function App(): JSX.Element {
     return (

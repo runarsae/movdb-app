@@ -1,35 +1,39 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {useQuery, useReactiveVar} from "@apollo/client";
 import {popupMovieVar, popupOpenVar} from "../../Store";
 import {MOVIE, Movie} from "../../Queries";
-import {StyleSheet, ActivityIndicator, ScrollView, View} from "react-native";
+import {StyleSheet, ScrollView, View} from "react-native";
 import {Caption, Card, IconButton, Paragraph, Title, useTheme, Text, Divider, Avatar} from "react-native-paper";
 import ChipContainer from "./ChipContainer";
-import {getStatusBarHeight} from "react-native-status-bar-height";
 import {format} from "date-fns";
 import YoutubePlayer from "react-native-youtube-iframe";
+import * as Animatable from "react-native-animatable";
+import {getStatusBarHeight} from "react-native-status-bar-height";
 
 const styles = StyleSheet.create({
     wrapper: {
         position: "absolute",
         width: "100%",
         height: "100%",
+        top: "100%",
         zIndex: 5
     },
-    container: {
-        paddingHorizontal: 15,
-        paddingBottom: 15,
-        width: "100%",
-        alignItems: "center"
-    },
-    touchable: {
-        position: "absolute",
+    scrollViewWrapper: {
         width: "100%",
         height: "100%"
     },
+    scrollViewContainer: {
+        width: "100%",
+        paddingHorizontal: 15,
+        paddingBottom: 16,
+        alignItems: "center",
+        justifyContent: "flex-end"
+    },
     card: {
         width: "100%",
-        maxWidth: 600
+        maxWidth: 600,
+        borderBottomLeftRadius: 0,
+        borderBottomRightRadius: 0
     },
     closeButton: {
         position: "absolute",
@@ -90,11 +94,12 @@ function MoviePopup(): JSX.Element | null {
     const {colors} = useTheme();
 
     const [popupWidth, setPopupWidth] = useState<number>(0);
+    const [popupHeight, setPopupHeight] = useState<number>(0);
 
     const popupOpen = useReactiveVar(popupOpenVar);
     const popupMovie = useReactiveVar(popupMovieVar);
 
-    const [movie, setMovie] = useState<Movie>();
+    const [movie, setMovie] = useState<Movie | undefined>(undefined);
 
     // Get movie data for the ID in store
     const {data} = useQuery<{movie: Movie}>(MOVIE, {
@@ -109,33 +114,66 @@ function MoviePopup(): JSX.Element | null {
         }
     }, [data]);
 
-    // When popup closes, clear movie data
-    useEffect(() => {
-        if (!popupOpen) {
-            setMovie(undefined);
-            popupMovieVar(undefined);
-        }
-    }, [popupOpen]);
+    const animationViewRef = useRef<Animatable.View & View>(null);
+    const [animationViewHeight, setAnimationViewHeight] = useState<number>(0);
 
-    if (popupOpen) {
-        return (
-            <ScrollView
-                style={styles.wrapper}
-                contentContainerStyle={[
-                    styles.container,
-                    {paddingTop: 15 + getStatusBarHeight()},
-                    // Loading icon is vertically aligned center and popup card is aligned at flex-start
-                    !movie ? {justifyContent: "center", height: "100%"} : {justifyContent: "flex-start"}
-                ]}
-            >
-                {movie ? (
+    useEffect(() => {
+        if (popupOpen && movie) {
+            // On open, slide up based on height of animation view
+            animationViewRef.current?.transitionTo({transform: [{translateY: -animationViewHeight}]}, 250, "ease");
+        } else if (!popupOpen) {
+            // On close, slide down
+            animationViewRef.current?.transitionTo({transform: [{translateY: 0}]}, 200, "ease");
+        }
+    }, [popupOpen, movie]);
+
+    return (
+        <Animatable.View
+            pointerEvents="box-none"
+            ref={animationViewRef}
+            onTransitionEnd={() => {
+                if (!popupOpen && movie) {
+                    // Clear movie data when popup closes
+                    setMovie(undefined);
+                    popupMovieVar(undefined);
+                }
+            }}
+            style={[styles.wrapper, {marginTop: getStatusBarHeight()}]}
+            onLayout={(event) => {
+                // Get height of animation view
+                const {height} = event.nativeEvent.layout;
+
+                if (height != animationViewHeight) {
+                    setAnimationViewHeight(height);
+                }
+            }}
+        >
+            {movie && (
+                <ScrollView
+                    style={styles.scrollViewWrapper}
+                    contentContainerStyle={[
+                        styles.scrollViewContainer,
+                        {
+                            paddingTop:
+                                // Minimum top padding of 71 (header height + margin).
+                                // If popup height is less than animation view height,
+                                // the padding is increased to fill the remaining space.
+                                popupHeight + 71 < animationViewHeight ? animationViewHeight - (popupHeight + 16) : 71
+                        }
+                    ]}
+                >
                     <Card
                         style={styles.card}
                         onLayout={(event) => {
-                            const {width} = event.nativeEvent.layout;
+                            // Get popup width and height
+                            const {width, height} = event.nativeEvent.layout;
 
                             if (width != popupWidth) {
                                 setPopupWidth(width);
+                            }
+
+                            if (height != popupHeight) {
+                                setPopupHeight(height);
                             }
                         }}
                     >
@@ -170,9 +208,10 @@ function MoviePopup(): JSX.Element | null {
                                 <YoutubePlayer
                                     initialPlayerParams={{modestbranding: true, rel: false, loop: true}}
                                     videoId={movie.trailer!}
-                                    height={((popupWidth - 32) / 16) * 9} // 16:9
-                                    play
-                                    mute
+                                    height={((popupWidth - 32) / 16) * 9} // 16:9 ratio
+                                    webViewProps={{
+                                        scrollEnabled: false
+                                    }}
                                     webViewStyle={{
                                         borderRadius: 4
                                     }}
@@ -197,15 +236,10 @@ function MoviePopup(): JSX.Element | null {
                             />
                         </Card.Content>
                     </Card>
-                ) : (
-                    // Loading
-                    <ActivityIndicator size="large" color={colors.primary} />
-                )}
-            </ScrollView>
-        );
-    } else {
-        return null;
-    }
+                </ScrollView>
+            )}
+        </Animatable.View>
+    );
 }
 
 export default MoviePopup;
