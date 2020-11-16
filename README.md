@@ -38,7 +38,7 @@ Et vindu i nettleseren vil åpnes, og herfra kan du kjøre applikasjonen på øn
 
 Prosjektet er initialisert gjennom Expo, med TypeScript som implementasjonsspråk. Det er brukt en strict versjon av TypeScript, hvor alle variabler, parametere og returverdier er typedefinert. Dette sikrer at man unngår typefeil under utvikling og det gir mer struktur til koden.
 
-Komponentene som er implementert består hovedsakelig av kjernekomponentene som finnes i React Native. Her er det blant annet brukt stylesheet, view, scroll view, text, image og touchables, for å nevne noen. Det er også brukt flere [tredjepartskomponenter](#tredjepartskomponenter) for spesifikke elementer. Det overordnede komponenttreet er illustrert i figur 1. Hver komponent er dokumentert gjennom kommentarer i koden der det er følt at det er fornuftig for forståelsen.
+Komponentene som er implementert består hovedsakelig av kjernekomponentene som finnes i React Native. Her er det blant annet brukt Stylesheet, View, ScrollView, FlatList, Text, Image og touchables, for å nevne noen. Det er også brukt flere [tredjepartskomponenter](#tredjepartskomponenter) for spesifikke elementer. Det overordnede komponenttreet er illustrert i figur 1. Hver komponent er dokumentert gjennom kommentarer i koden der det er følt at det er fornuftig for forståelsen.
 
 <img width="556" height="485" src="documentation/component_tree.png">
 
