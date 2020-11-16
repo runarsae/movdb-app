@@ -78,10 +78,10 @@ Tredjepartskomponentene og bibliotekene listet opp nedenfor er tatt i bruk for �
 
 ## Testing
 
-Applikasjonen er manuelt end-2-end-testet på én fysisk enhet (iOS 14.1) og én simulator (Android 11). Tabellen nedenfor viser stegene og sjekkene som er gjort for en brukssituasjon som dekker all funksjonalitet. Resultatene av sjekkene for hver av enhetene som det er testet på er listet til høyre.
+Applikasjonen er manuelt end-2-end-testet på én fysisk enhet og én simulator. Tabellen nedenfor viser stegene og sjekkene som er gjort for en brukssituasjon som dekker all funksjonalitet. Resultatene av sjekkene for hver enhet er listet til høyre. Det er verdt å nevne at det vil lønne seg å teste applikasjonen på flere forskjellige enheter utover disse to, som gjerne har ulike skjermstørrelser og forskjellige versjoner av operativsystemene.
 
-| Steg                                                                                            | Sjekk                                                                                                                                                                       | iPhone 8 (iOS 14.1)               | Pixel XL (Android 11)\*           |
-| ----------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | --------------------------------- |
+| Steg                                                                                            | Sjekk                                                                                                                                                                       |        iPhone 8 (iOS 14.1)        |      Pixel XL (Android 11)\*      |
+| ----------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------: | :-------------------------------: |
 | Åpne applikasjon                                                                                | Laster korrekt, med header og movie container                                                                                                                               | ![check](documentation/check.png) | ![check](documentation/check.png) |
 | Scroll nedover mot bunnen                                                                       | Neste side med filmer laster, totalt 40 filmer (20 per side)                                                                                                                | ![check](documentation/check.png) | ![check](documentation/check.png) |
 | Trykk på søkeikon i header                                                                      | Søkemeny og tastatur åpner seg, tekstfeltet er fokusert                                                                                                                     | ![check](documentation/check.png) | ![check](documentation/check.png) |
@@ -105,6 +105,14 @@ _\* Simulator_
 <img src="documentation/check.png" width="20"> : Fungerer som ønsket
 
 <img src="documentation/minus.png" width="20"> : Fungerer delvis
+
+<img src="documentation/cross.png" width="20"> : Fungerer ikke
+
+### Avvik
+
+-   Trykk på lukke-ikon, Pixel XL (Android 11), simulator: Når popup lukkes hakker animasjonen (skli nedover, ut skjermen).
+
+Utover dette oppfører applikasjonen seg helt likt på de valgte testenhetene.
 
 ## Git og GitLab
 
