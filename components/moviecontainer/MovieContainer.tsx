@@ -1,19 +1,15 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import MovieCard from "./MovieCard";
 import {useQuery, useReactiveVar} from "@apollo/client";
 import {Movie, MOVIES, Movies, MoviesVariables} from "../../Queries";
-import {Text, View, StyleSheet, ActivityIndicator, ScrollView, NativeScrollEvent} from "react-native";
+import {Text, View, StyleSheet, ActivityIndicator, FlatList, Dimensions, ScaledSize} from "react-native";
 import {useTheme} from "react-native-paper";
 import {filterVar, searchVar, sortDirectionVar, sortVar} from "../../Store";
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
-    },
-    movies: {
-        justifyContent: "center",
-        flexDirection: "row",
-        flexWrap: "wrap",
+        flexDirection: "column",
+        alignItems: "center",
         paddingVertical: 15
     },
     feedback: {
@@ -29,6 +25,9 @@ const styles = StyleSheet.create({
     }
 });
 
+// Initial width of window, used to calculate number of columns in flat list
+const window = Dimensions.get("window");
+
 /*
  *  Movie container for movie cards.
  *  Displays matching movies (according to search, sort and filter) in a paginated infinite scrollable list.
@@ -36,11 +35,11 @@ const styles = StyleSheet.create({
 function MovieContainer(): JSX.Element {
     const {colors} = useTheme();
 
-    const [containerHeight, setContainerHeight] = useState<number>(0);
-    const [contentHeight, setContentHeight] = useState<number>(0);
+    // Number of columns in the flat list; calculated based on window width
+    const [numColumns, setNumColumns] = useState<number>(2);
 
     const [variables, setVariables] = useState<MoviesVariables>();
-    const [movies, setMovies] = useState<JSX.Element[]>([]);
+    const [movies, setMovies] = useState<Movie[]>([]);
 
     // Get filter, search and sort values from cache
     // Refetched automatically when cache is updated
@@ -54,19 +53,16 @@ function MovieContainer(): JSX.Element {
     const [currentPage, setCurrentPage] = useState<number>(0);
     const [pageLoading, setPageLoading] = useState<boolean>(true);
 
-    const scrollViewRef = useRef<ScrollView>(null);
-
     // If filter, search, sort or sort direction is changed,
-    // reset current page, page count and movies array, and scroll to top
+    // reset current page, page count and movies array
     useEffect(() => {
         // Wait till all values are recieved
-        if (filter && search !== undefined && sort && sortDirection && scrollViewRef.current) {
+        if (filter && search !== undefined && sort && sortDirection) {
             setCurrentPage(1);
             setPageCount(1);
             setMovies([]);
-            scrollViewRef.current.scrollTo({y: 0});
         }
-    }, [filter, search, sort, sortDirection, scrollViewRef]);
+    }, [filter, search, sort, sortDirection]);
 
     // If current page or movies array is changed,
     // update the variables used in the query
@@ -105,15 +101,7 @@ function MovieContainer(): JSX.Element {
     // On fetch, concatenate already fetched movies with the newly fetched ones
     useEffect(() => {
         if (moviesData) {
-            const fetchedMovies = moviesData.movies.movies.map((movie: Movie) => (
-                <MovieCard
-                    key={movie.imdb_id!}
-                    imdbID={movie.imdb_id!}
-                    rating={movie.rating!}
-                    title={movie.original_title!}
-                    poster={movie.poster_path!}
-                />
-            ));
+            const fetchedMovies = moviesData.movies.movies;
 
             setMovies((prevMovies) => prevMovies.concat(fetchedMovies));
             setPageCount(moviesData.movies.pageCount);
@@ -129,42 +117,51 @@ function MovieContainer(): JSX.Element {
         }
     };
 
-    // Calculates if scrolling has reached the end (with a threshold of 1000px)
-    const endReached = ({layoutMeasurement, contentOffset, contentSize}: NativeScrollEvent) => {
-        const threshold = 1000;
+    // The render item in the flat list; this component is generated for each item in the list
+    const movie = ({item}: {item: Movie}) => (
+        <MovieCard
+            key={item.imdb_id!}
+            imdbID={item.imdb_id!}
+            rating={item.rating!}
+            title={item.original_title!}
+            poster={item.poster_path!}
+        />
+    );
 
-        return layoutMeasurement.height + contentOffset.y >= contentSize.height - threshold;
+    // Calculate the number of columns of the flat list based on window width
+    const calculateNumColumns = ({window}: {window: ScaledSize}) => {
+        // 180 is the width of each movie card (including margins)
+        const newNumColumns = Math.floor(window.width / 180);
+
+        if (newNumColumns !== numColumns) {
+            setNumColumns(newNumColumns);
+        }
     };
 
-    // If content height is smaller than container height, render the next page
-    // Triggers when there are not enough initial results to fill the whole container
+    // Trigger calculation of number of columns
     useEffect(() => {
-        if (contentHeight && containerHeight && contentHeight < containerHeight) {
-            nextPage();
-        }
-    }, [contentHeight, containerHeight, pageLoading, currentPage, pageCount]);
+        // Initial calculation on component render
+        calculateNumColumns({window});
+
+        // If width of window changes, recalculate the number of columns
+        Dimensions.addEventListener("change", calculateNumColumns);
+        return () => {
+            Dimensions.removeEventListener("change", calculateNumColumns);
+        };
+    }, []);
 
     return (
-        <View style={styles.container}>
-            <ScrollView
-                ref={scrollViewRef}
-                contentContainerStyle={styles.movies}
-                onScroll={({nativeEvent}) => {
-                    // If scroll has reached the end, load the next page
-                    if (endReached(nativeEvent)) {
-                        nextPage();
-                    }
-                }}
-                scrollEventThrottle={100}
-                onContentSizeChange={(width, height) => {
-                    setContentHeight(height);
-                }}
-                onLayout={(event) => {
-                    setContainerHeight(event.nativeEvent.layout.height);
-                }}
-            >
-                {movies}
-
+        <FlatList
+            contentContainerStyle={styles.container}
+            data={movies}
+            renderItem={movie}
+            initialNumToRender={20}
+            keyExtractor={(movie) => movie.imdb_id!}
+            numColumns={numColumns}
+            key={numColumns}
+            onEndReached={nextPage}
+            onEndReachedThreshold={3}
+            ListFooterComponent={() => (
                 <View style={styles.feedback}>
                     {!queryLoading &&
                     !pageLoading &&
@@ -183,8 +180,8 @@ function MovieContainer(): JSX.Element {
                         <ActivityIndicator size="large" color={colors.primary} />
                     )}
                 </View>
-            </ScrollView>
-        </View>
+            )}
+        />
     );
 }
 
