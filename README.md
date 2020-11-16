@@ -1,5 +1,5 @@
-# MovDB <img width="400" src="documentation/mockups.png" align="right">
-
+# MovDB
+<img width="400" src="documentation/mockups.png" align="right">
 MovDB er en applikasjon for informasjon om nærmere 3000 filmer. Den inneholder et søkegrensesnitt hvor man kan søke etter både tittel og beskrivelse. Videre kan man filtrere filmene etter sjanger, lanseringsår og varighet. De kan også sorteres etter rating, tittel (alfabetisk), varighet og lanseringsår, både i stigende og synkende rekkefølge. Resultatene presenteres i en listebasert visning, hvor man kan scrolle nedover for å laste inn flere. Hver film i listen kan trykkes på. Da vises en popup med mer informasjon om filmen og dens trailer.
 
 ### Systemkrav
