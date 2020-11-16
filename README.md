@@ -1,8 +1,8 @@
-# MovDB <img width="400" src="documentation/mockups.png" align="right">
-
+# MovDB
+<img width="400" src="documentation/mockups.png" align="right">
 MovDB er en applikasjon for informasjon om nærmere 3000 filmer. Den inneholder et søkegrensesnitt hvor man kan søke etter både tittel og beskrivelse. Videre kan man filtrere filmene etter sjanger, lanseringsår og varighet. De kan også sorteres etter rating, tittel (alfabetisk), varighet og lanseringsår, både i stigende og synkende rekkefølge. Resultatene presenteres i en listebasert visning, hvor man kan scrolle nedover for å laste inn flere. Hver film i listen kan trykkes på. Da vises en popup med mer informasjon om filmen og dens trailer.
 
-## Systemkrav
+### Systemkrav
 
 For å kjøre applikasjonen lokalt er følgende nødvendig:
 
@@ -10,7 +10,7 @@ For å kjøre applikasjonen lokalt er følgende nødvendig:
 -   [Expo CLI](https://docs.expo.io/workflow/expo-cli/) (installert globalt)
 -   Expo Client på [iOS](https://apps.apple.com/app/apple-store/id982107779) eller [Android](https://play.google.com/store/apps/details?id=host.exp.exponent&referrer=www) (mobilenhet eller simulator)
 
-## Installering og kjøring
+### Installering og kjøring
 
 Klon repoet:
 
@@ -81,6 +81,6 @@ Tredjepartskomponentene og bibliotekene listet opp nedenfor er tatt i bruk for �
 
 Applikasjonen er manuelt end-2-end-testet på ...
 
-## Git
+## Git og GitLab
 
 Git og GitLab er brukt under utviklingen av applikasjonen. Det er opprettet et issue for hver utviklingsoppgave, med en tilhørende branch og merge request inn til hovedbranchen. Issues er markert med labels for å tydeliggjøre hva de innebærer. Siden prosjektet er gjennomført av én person, er det ikke fokusert på samhandlingsmekanismer, som code reviews. Merge conflicts har heller ikke vært et problem, da et issue ble gjort ferdig før neste ble begynt på.
