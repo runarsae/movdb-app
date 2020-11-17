@@ -37,7 +37,7 @@ Et vindu i nettleseren vil åpnes, og herfra kan du kjøre applikasjonen på øn
 
 ### React Native og TypeScript
 
-Prosjektet er initialisert gjennom Expo, med TypeScript som implementasjonsspråk. Det er brukt en strict versjon av TypeScript, hvor alle variabler, parametere og returverdier er typedefinert. Dette sikrer at man unngår typefeil under utvikling og det gir mer struktur til koden.
+Prosjektet er initialisert gjennom Expo, med TypeScript som implementasjonsspråk. Det er brukt en strict versjon av TypeScript, hvor alle variabler, parametere og returverdier er typedefinert. Dette gjør at man unngår typefeil under utvikling og det gir mer struktur til koden. [ESLint](https://eslint.org/) og [Prettier](https://prettier.io/) er brukt til henholdsvis linting og formatering for å sikre konsistent og feilfri kode.
 
 Komponentene som er implementert består hovedsakelig av kjernekomponentene som finnes i React Native. Her er det blant annet brukt Stylesheet, View, ScrollView, FlatList, Text, Image og touchables, for å nevne noen. Det er også brukt flere [tredjepartskomponenter](#tredjepartskomponenter-og-bibliotek) for spesifikke elementer. Det overordnede komponenttreet er illustrert i figuren nedenfor. Hver komponent er dokumentert gjennom kommentarer i koden der det føles fornuftig for forståelsen.
 
