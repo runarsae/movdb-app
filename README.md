@@ -45,7 +45,7 @@ Komponentene som er implementert består hovedsakelig av kjernekomponentene som 
 
 ### Backend
 
-Backend er i sin helhet gjenbrukt fra prosjekt 3 og er installert på virtuell maskin hos IDI. For mer informasjon om backend henvises det til [prosjekt 3](https://gitlab.stud.idi.ntnu.no/it2810-h20/team-23/prosjekt-3).
+Backend er i sin helhet gjenbrukt fra web-applikasjonen og er installert på virtuell maskin hos IDI. For mer informasjon om backend henvises det til [MovDB Web](https://github.com/runarsae/movdb-web).
 
 ### Gjenbruk av kode
 
